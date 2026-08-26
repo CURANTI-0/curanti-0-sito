@@ -491,6 +491,7 @@ section{ padding: clamp(50px, 7vw, 90px) 0; }
   font-family: var(--font-mono);
   font-size: .82rem;
   background: var(--paper);
+  color: var(--ink);
   border: 1px solid var(--line);
   padding: 8px 16px;
   border-radius: 100px;
