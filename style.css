@@ -555,6 +555,7 @@ section{ padding: clamp(50px, 7vw, 90px) 0; }
 }
 .gallery-item span{ opacity: .92; max-width: 16ch; }
 .gallery-item.c-amber{ color: var(--ink); }
+.gallery-photo{ width: 100%; height: 100%; object-fit: cover; display: block; }
 
 /* ---------------- News ---------------- */
 .news-list{
