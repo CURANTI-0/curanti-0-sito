@@ -407,11 +407,11 @@ section{ padding: clamp(50px, 7vw, 90px) 0; }
   padding: clamp(22px, 3vw, 30px);
 }
 
-/* ---- griglia obiettivi a forma di croce (richiama il logomark) ---- */
+/* ---- griglia obiettivi a vera forma di croce (3x3, come l'hero-cross) ---- */
 .obj-cross{
   display: grid;
-  grid-template-columns: repeat(2, minmax(0,1fr));
-  grid-template-rows: repeat(2, auto);
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  grid-template-rows: repeat(3, auto);
   gap: 16px;
   max-width: 760px;
 }
@@ -438,8 +438,36 @@ section{ padding: clamp(50px, 7vw, 90px) 0; }
 .obj-card.c-amber .num{ color: rgba(34,31,25,0.7); }
 .obj-card.c-teal{ background: var(--teal); }
 .obj-card.c-vermillion{ background: var(--vermillion); }
+
+.obj-cross .cross-top{ grid-column: 2; grid-row: 1; }
+.obj-cross .cross-left{ grid-column: 1; grid-row: 2; }
+.obj-cross-center{
+  grid-column: 2; grid-row: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.obj-cross-center .cross-dots{ grid-template-columns: repeat(4, 11px); gap: 6px; }
+.obj-cross-center .cross-dots span{ width: 11px; height: 11px; border-radius: 3px; }
+.obj-cross .cross-right{ grid-column: 3; grid-row: 2; }
+.obj-cross .cross-bottom{ grid-column: 2; grid-row: 3; }
+
 @media (max-width: 640px){
-  .obj-cross{ grid-template-columns: 1fr; }
+  .obj-cross{ grid-template-columns: 1fr; grid-template-rows: auto; }
+  .obj-cross .cross-top, .obj-cross .cross-left, .obj-cross .cross-right, .obj-cross .cross-bottom{ grid-column: 1; grid-row: auto; }
+  .obj-cross-center{ display: none; }
+}
+
+/* ingresso "a incastro": i 4 pezzi arrivano da nord/sud/est/ovest e si compongono a croce */
+.obj-cross-center{ transform: scale(.4); transition: transform .5s cubic-bezier(.2,.8,.3,1.2); }
+.reveal.in > .obj-cross-center{ transform: scale(1); }
+.obj-cross.reveal:not(.in) .cross-top.obj-card{ transform: translate(0,-42px) rotate(-7deg) scale(.82) perspective(900px) rotateX(var(--tiltX,0deg)) rotateY(var(--tiltY,0deg)); }
+.obj-cross.reveal:not(.in) .cross-left.obj-card{ transform: translate(-42px,0) rotate(7deg) scale(.82) perspective(900px) rotateX(var(--tiltX,0deg)) rotateY(var(--tiltY,0deg)); }
+.obj-cross.reveal:not(.in) .cross-right.obj-card{ transform: translate(42px,0) rotate(-7deg) scale(.82) perspective(900px) rotateX(var(--tiltX,0deg)) rotateY(var(--tiltY,0deg)); }
+.obj-cross.reveal:not(.in) .cross-bottom.obj-card{ transform: translate(0,42px) rotate(7deg) scale(.82) perspective(900px) rotateX(var(--tiltX,0deg)) rotateY(var(--tiltY,0deg)); }
+.obj-cross .obj-card.obj-card{
+  transform: translate(0,0) rotate(0deg) scale(1) perspective(900px) rotateX(var(--tiltX,0deg)) rotateY(var(--tiltY,0deg));
+  transition: transform .5s cubic-bezier(.2,.8,.3,1.2), box-shadow .35s ease;
 }
 
 /* ---------------- Founders ---------------- */
@@ -769,11 +797,27 @@ section{ padding: clamp(50px, 7vw, 90px) 0; }
 .section-dark .wrap{ position: relative; z-index: 1; }
 @keyframes float-dark{ to{ transform: translate(14px, -10px); } }
 
-/* ---------------- Tilt 3D su card ---------------- */
-.card, .obj-card, .founder-card, .info-card, .fee-card, .news-card, .gallery-item{
-  transform: perspective(900px) rotateX(var(--tiltX,0deg)) rotateY(var(--tiltY,0deg));
-  transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease, border-color .35s ease;
+/* ---------------- Tilt 3D su card ----------------
+   Specificità "raddoppiata" di proposito: le card vivono quasi sempre dentro un
+   contenitore .reveal, la cui regola per il figlio rivelato (.reveal.in > *) ha
+   specificità (0,2,0) e vincerebbe sul semplice ".card" (0,1,0), disattivando il
+   tilt a riposo. Qui portiamo la base a (0,2,0) e gestiamo l'ingresso con una
+   regola :not(.in) ancora più specifica, con la stessa struttura di funzioni
+   (translateY + perspective + rotateX/Y) così la transizione resta fluida. */
+.card.card, .obj-card.obj-card, .founder-card.founder-card, .info-card.info-card,
+.fee-card.fee-card, .news-card.news-card, .gallery-item.gallery-item{
+  transform: translateY(0) perspective(900px) rotateX(var(--tiltX,0deg)) rotateY(var(--tiltY,0deg));
+  transition: transform .4s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease, border-color .35s ease;
   will-change: transform;
+}
+.reveal:not(.in) > .card.card,
+.reveal:not(.in) > .obj-card.obj-card,
+.reveal:not(.in) > .founder-card.founder-card,
+.reveal:not(.in) > .info-card.info-card,
+.reveal:not(.in) > .fee-card.fee-card,
+.reveal:not(.in) > .news-card.news-card,
+.reveal:not(.in) > .gallery-item.gallery-item{
+  transform: translateY(16px) perspective(900px) rotateX(var(--tiltX,0deg)) rotateY(var(--tiltY,0deg));
 }
 .card:hover, .obj-card:hover, .founder-card:hover, .info-card:hover, .fee-card:hover, .news-card:hover, .gallery-item:hover{
   box-shadow: 0 22px 44px -22px rgba(34,31,25,0.35);
@@ -792,18 +836,30 @@ section{ padding: clamp(50px, 7vw, 90px) 0; }
 }
 .btn-primary:hover::after{ transform: translateX(120%); }
 
-/* ---------------- Galleria: hover, overlay, lightbox ---------------- */
+/* ---------------- Galleria: duotono brand, hover, lightbox ----------------
+   A riposo ogni foto è desaturata e tinta del colore del proprio riquadro
+   (lo stesso già usato come sfondo), così la griglia sembra un'unica serie
+   illustrata coerente con la croce del logo. Sull'hover la tinta si attenua
+   e il colore reale della foto riaffiora. */
 .gallery-item{ cursor: zoom-in; }
-.gallery-photo{ transition: transform .5s ease; }
-.gallery-item:hover .gallery-photo{ transform: scale(1.08); }
+.gallery-photo{
+  transition: transform .6s ease, filter .5s ease;
+  filter: grayscale(1) contrast(1.1) brightness(1.08);
+}
+.gallery-item:hover .gallery-photo{
+  transform: scale(1.08);
+  filter: grayscale(.1) contrast(1.03) brightness(1.02);
+}
 .gallery-item::after{
   content: "";
   position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(34,31,25,.5), transparent 55%);
-  opacity: 0;
-  transition: opacity .3s ease;
+  background-color: inherit;
+  mix-blend-mode: color;
+  opacity: .82;
+  transition: opacity .5s ease;
+  pointer-events: none;
 }
-.gallery-item:hover::after{ opacity: 1; }
+.gallery-item:hover::after{ opacity: .28; }
 
 .lightbox{
   position: fixed; inset: 0;
