@@ -102,3 +102,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+// Conto alla rovescia eventi
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.countdown[data-target]').forEach(box => {
+    const target = new Date(box.dataset.target).getTime();
+    const set = (u, v) => { const el = box.querySelector('[data-u="' + u + '"]'); if (el) el.textContent = String(v).padStart(2, '0'); };
+    const tick = () => {
+      const diff = target - Date.now();
+      if (diff <= 0) { box.classList.add('done'); return false; }
+      set('d', Math.floor(diff / 864e5));
+      set('h', Math.floor(diff % 864e5 / 36e5));
+      set('m', Math.floor(diff % 36e5 / 6e4));
+      set('s', Math.floor(diff % 6e4 / 1e3));
+      return true;
+    };
+    if (tick()) { const t = setInterval(() => { if (!tick()) clearInterval(t); }, 1000); }
+  });
+});
