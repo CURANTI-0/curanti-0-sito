@@ -102,3 +102,52 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+// Conto alla rovescia eventi
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.countdown[data-target]').forEach(box => {
+    const target = new Date(box.dataset.target).getTime();
+    const set = (u, v) => { const el = box.querySelector('[data-u="' + u + '"]'); if (el) el.textContent = String(v).padStart(2, '0'); };
+    const tick = () => {
+      const diff = target - Date.now();
+      if (diff <= 0) { box.classList.add('done'); return false; }
+      set('d', Math.floor(diff / 864e5));
+      set('h', Math.floor(diff % 864e5 / 36e5));
+      set('m', Math.floor(diff % 36e5 / 6e4));
+      set('s', Math.floor(diff % 6e4 / 1e3));
+      return true;
+    };
+    if (tick()) { const t = setInterval(() => { if (!tick()) clearInterval(t); }, 1000); }
+  });
+});
+
+// Appendice evento (home): chiudibile per la sessione
+document.addEventListener('DOMContentLoaded', () => {
+  const box = document.getElementById('event-float');
+  if (!box) return;
+  try { if (sessionStorage.getItem('event-float-closed')) box.classList.add('hidden'); } catch (e) {}
+  box.querySelector('.ef-close').addEventListener('click', ev => {
+    ev.preventDefault(); ev.stopPropagation();
+    box.classList.add('hidden');
+    try { sessionStorage.setItem('event-float-closed', '1'); } catch (e) {}
+  });
+});
+
+// Scadenza automatica: gli elementi con data-expires spariscono dopo la data indicata
+document.addEventListener('DOMContentLoaded', () => {
+  const now = Date.now();
+  document.querySelectorAll('[data-expires]').forEach(el => {
+    if (now < new Date(el.dataset.expires).getTime()) return;
+    if (el.classList.contains('event-feature')) {
+      // Pagina Eventi: la scheda resta come archivio, senza iscrizione né conto alla rovescia
+      el.classList.add('event-past');
+      el.querySelectorAll('.countdown, .btn-row, .event-note, .event-tag').forEach(n => n.remove());
+      const tag = document.createElement('span');
+      tag.className = 'event-tag';
+      tag.textContent = 'Evento concluso · Grazie a chi è venuto';
+      el.querySelector('.event-info').prepend(tag);
+    } else {
+      el.remove();
+    }
+  });
+});
