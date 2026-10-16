@@ -1033,3 +1033,4 @@ section{ padding: clamp(50px, 7vw, 90px) 0; }
 @media (max-width: 520px){
   .event-float{ left: 12px; right: 12px; bottom: 12px; }
 }
+.event-past .event-poster{ filter: grayscale(.4); }

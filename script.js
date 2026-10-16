@@ -132,3 +132,22 @@ document.addEventListener('DOMContentLoaded', () => {
     try { sessionStorage.setItem('event-float-closed', '1'); } catch (e) {}
   });
 });
+
+// Scadenza automatica: gli elementi con data-expires spariscono dopo la data indicata
+document.addEventListener('DOMContentLoaded', () => {
+  const now = Date.now();
+  document.querySelectorAll('[data-expires]').forEach(el => {
+    if (now < new Date(el.dataset.expires).getTime()) return;
+    if (el.classList.contains('event-feature')) {
+      // Pagina Eventi: la scheda resta come archivio, senza iscrizione né conto alla rovescia
+      el.classList.add('event-past');
+      el.querySelectorAll('.countdown, .btn-row, .event-note, .event-tag').forEach(n => n.remove());
+      const tag = document.createElement('span');
+      tag.className = 'event-tag';
+      tag.textContent = 'Evento concluso · Grazie a chi è venuto';
+      el.querySelector('.event-info').prepend(tag);
+    } else {
+      el.remove();
+    }
+  });
+});
