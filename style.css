@@ -1003,3 +1003,4 @@ section{ padding: clamp(50px, 7vw, 90px) 0; }
   .event-poster{ transform:none; }
   .event-banner .poster-mini{ margin: 0 auto; transform:none; }
 }
+.speaker-title{ display:block; font-weight:700; color: var(--teal-deep); margin-bottom:.5em; }
