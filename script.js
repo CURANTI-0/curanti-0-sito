@@ -120,3 +120,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (tick()) { const t = setInterval(() => { if (!tick()) clearInterval(t); }, 1000); }
   });
 });
+
+// Appendice evento (home): chiudibile per la sessione
+document.addEventListener('DOMContentLoaded', () => {
+  const box = document.getElementById('event-float');
+  if (!box) return;
+  try { if (sessionStorage.getItem('event-float-closed')) box.classList.add('hidden'); } catch (e) {}
+  box.querySelector('.ef-close').addEventListener('click', ev => {
+    ev.preventDefault(); ev.stopPropagation();
+    box.classList.add('hidden');
+    try { sessionStorage.setItem('event-float-closed', '1'); } catch (e) {}
+  });
+});

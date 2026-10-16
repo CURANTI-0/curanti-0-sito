@@ -1004,3 +1004,32 @@ section{ padding: clamp(50px, 7vw, 90px) 0; }
   .event-banner .poster-mini{ margin: 0 auto; transform:none; }
 }
 .speaker-title{ display:block; font-weight:700; color: var(--teal-deep); margin-bottom:.5em; }
+
+/* Appendice mobile evento (home) */
+.event-float{
+  position: fixed; right: 18px; bottom: 18px; z-index: 90;
+  display: flex; align-items: center; gap: 12px;
+  background: var(--ink); color: var(--paper); text-decoration: none;
+  padding: 10px 40px 10px 10px; border-radius: 14px;
+  border-bottom: 4px solid var(--vermillion);
+  box-shadow: 0 14px 30px -10px rgba(0,0,0,.5);
+  animation: ef-in .6s .8s both cubic-bezier(.2,.8,.2,1);
+  transition: transform .2s ease;
+}
+.event-float:hover{ transform: translateY(-3px); }
+.event-float.hidden{ display: none; }
+.ef-date{ display:grid; place-items:center; width:48px; height:48px; border-radius:10px; background: var(--forest); line-height:1; text-align:center; }
+.ef-date b{ font-family: var(--font-display); font-size:1.35rem; }
+.ef-date small{ font-family: var(--font-mono); font-size:.62rem; text-transform:uppercase; letter-spacing:.1em; }
+.ef-text{ display:grid; line-height:1.25; }
+.ef-text strong{ font-family: var(--font-display); font-size:.98rem; }
+.ef-text small{ font-family: var(--font-mono); font-size:.68rem; letter-spacing:.04em; color: var(--amber); text-transform:uppercase; }
+.ef-close{
+  position:absolute; top:4px; right:6px; width:26px; height:26px; border:0; border-radius:50%;
+  background: transparent; color: rgba(251,247,238,.7); font-size:1.2rem; line-height:1; cursor:pointer;
+}
+.ef-close:hover{ color:#fff; background: rgba(255,255,255,.12); }
+@keyframes ef-in{ from{ opacity:0; transform: translateY(24px); } to{ opacity:1; transform:none; } }
+@media (max-width: 520px){
+  .event-float{ left: 12px; right: 12px; bottom: 12px; }
+}
